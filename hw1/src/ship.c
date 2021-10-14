@@ -139,17 +139,16 @@ size_t create_ships(ship ***ships) {
 }
 
 //Функция возвращает массив. 0 - не прошел фильтр. 1 - прошел
-bool filter(ship ***ships_p, size_t size, bool **flags, ship *pattern) {
+bool filter(ship **ships, size_t size, bool **flags, ship *pattern) {
     if (!pattern)
         return false;
-    if (!ships_p)
+    if (!ships)
         return false;
     if (size == 0)
         return false;
     (*flags) = (bool*)malloc(sizeof(bool) * size);
     if (!(*flags))
         return false;
-    ship **ships = *ships_p;
     for (size_t i = 0; i < size; ++i) {
         (*flags)[i] = true;
         if (*(pattern->name))

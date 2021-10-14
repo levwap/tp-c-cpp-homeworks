@@ -1,5 +1,3 @@
-
-
 #ifndef HW1_SHIP_H
 #define HW1_SHIP_H
 
@@ -10,7 +8,7 @@
 
 
 #define MAX_COUNT_SHIPS 10
-#define MAX_SHIP_NAME 5
+#define MAX_SHIP_NAME 20
 #define MAX_SHIPYARD_NAME 51
 #define MAX_WAR_HISTORY 101
 
@@ -31,7 +29,7 @@ typedef struct ship {
 
 bool create_ship(ship **new_ship_p);
 size_t create_ships(ship ***ships);
-bool filter(ship ***ships_p, size_t size, bool **flags, ship *pattern);
+bool filter(ship **ships, size_t size, bool **flags, ship *pattern);
 void print_ships_after_filter(ship **ships, size_t size, const bool *flags);
 void delete_all(ship **ships, bool *flags, ship *pattern, size_t size);
 

@@ -1,35 +1,19 @@
 dist:     bionic
-language: cpp
+language: c
 os:
   - linux
 
 compiler:
   - gcc
 
-env:
-  - TARGET_CPU=amd64 BUILD_CONFIGURATION=Debug
-  - TARGET_CPU=amd64 BUILD_CONFIGURATION=Release
-  - TARGET_CPU=x86 BUILD_CONFIGURATION=Debug
-  - TARGET_CPU=x86 BUILD_CONFIGURATION=Release
-
 install:
-  - source ci/travis/install-$TRAVIS_OS_NAME.sh
+  - sudo apt-get install cmake
+  - sudo apt-get install libgtest-dev
+  - cd /usr/src/gtest
+  - sudo cmake CMakeLists.txt
+  - sudo make
+
 
 script:
-  - mkdir build
-  - cd build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_CONFIGURATION -DTARGET_CPU=$TARGET_CPU
-  - cmake --build .
-  - ctest --output-on-failure
-
-deploy:
-  provider:     releases
-  file:         <package-file>
-  skip_cleanup: true
-  overwrite:    true
-
-  api_key:
-    secure:   <encrypted-github-token>
-
-  on:
-    tags:     true
+  - cmake CMakeLists.txt
+  - make

@@ -1,5 +1,5 @@
-dist:     bionic
-language: c
+dist: bionic
+language: cpp
 #os:
 #  - linux
 #
@@ -15,6 +15,6 @@ language: c
 #
 
 script:
-  -echo 123
+  - echo 123
 #  - cmake CMakeLists.txt
 #  - make

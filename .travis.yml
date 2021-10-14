@@ -1,20 +1,19 @@
 dist: bionic
 language: cpp
-#os:
-#  - linux
-#
-#compiler:
-#  - gcc
-#
-#install:
-#  - sudo apt-get install cmake
-#  - sudo apt-get install libgtest-dev
-#  - cd /usr/src/gtest
-#  - sudo cmake CMakeLists.txt
-#  - sudo make
-#
+os:
+  - linux
+
+compiler:
+  - gcc
+
+install:
+  - sudo apt-get install cmake
+  - sudo apt-get install libgtest-dev
+  - cd /usr/src/gtest
+  - sudo cmake CMakeLists.txt
+  - sudo make
+
 
 script:
-  - echo 123
-#  - cmake CMakeLists.txt
-#  - make
+  - cmake CMakeLists.txt
+  - make

@@ -42,6 +42,8 @@ static int safe_int_input(int *number)
     return 1;
 }
 
+
+
 bool create_ship(ship **new_ship_p) {
     if (!new_ship_p) {
         return false;
@@ -52,7 +54,7 @@ bool create_ship(ship **new_ship_p) {
     ship *new_ship = *new_ship_p;
     new_ship->year = 3000;
     new_ship->crew = 0;
-    new_ship->status = 0;
+    new_ship->status = NO_INFORMATION;
 
     char *newline_ptr = NULL;
 
@@ -66,17 +68,25 @@ bool create_ship(ship **new_ship_p) {
 
     printf("Input shipyard name(if no information press Enter): ");
     fgets(new_ship->shipyard, MAX_SHIPYARD_NAME, stdin);
-    if (strchr(new_ship->shipyard, '\n') == NULL)
+    newline_ptr = strchr(new_ship->shipyard, '\n');
+    if (newline_ptr == NULL)
         clean_input();
+    else
+        *newline_ptr = 0;
 
     printf("Input year of production(if no information input more than 2021): ");
     while (!safe_int_input(&(new_ship->year)));
 
     printf("Input war history(if no information press Enter): ");
-    fgets(new_ship->war_history, MAX_WAR_HISTORY_LENGTH, stdin);
-    if (strchr(new_ship->war_history, '\n') == NULL)
+    fgets(new_ship->war_history, MAX_WAR_HISTORY, stdin);
+    newline_ptr = strchr(new_ship->war_history, '\n');
+    if (newline_ptr == NULL)
         clean_input();
-    int success = 0;
+    else
+        *newline_ptr = 0;
+
+
+    int success;
     int crew = -1;
     do {
         printf("Input number of crew(if no information input 0): ");
@@ -94,7 +104,7 @@ bool create_ship(ship **new_ship_p) {
                "Under repair - 4\n");
         success = safe_int_input(&status);
     } while (success != 1 || status < 0 || status > 4);
-    new_ship->status = status;
+    new_ship->status = (enum status)status;
 
     return true;
 }
@@ -118,8 +128,9 @@ size_t create_ships(ship ***ships) {
             printf("Do you want to input one more ship (y/n)? ");
             scanf("%c", &answer);
             clean_input();
-            if (answer != 'y')
-                success = false;
+            success = false;
+            if (answer == 'y')
+                success = true;
         }
     }
     return count;
@@ -143,7 +154,6 @@ bool filter(ship ***ships_p, size_t size, bool **flags, ship *pattern) {
         (*flags)[i] = true;
         if (*(pattern->name))
             if (strcmp(pattern->name, (ships[i])->name) != 0) {
-                printf("%s\n%s", pattern->name, ships[i]->name);
                 (*flags)[i] = false;
                 continue;
             }
@@ -182,6 +192,7 @@ bool filter(ship ***ships_p, size_t size, bool **flags, ship *pattern) {
 
 
 void print_ships_after_filter(ship **ships, size_t size, const bool *flags) {
+    printf("\n\n\n");
     for (size_t i = 0; i < size; ++i) {
         if (flags[i]) {
             if (((ships[i])->name)[0])
@@ -196,20 +207,19 @@ void print_ships_after_filter(ship **ships, size_t size, const bool *flags) {
                 printf("Ship count of crew: %zu\n", ships[i]->crew);
             if (ships[i]->status)
                 switch (ships[i]->status) {
-                    case 0:
-                        printf("No information about ship's status.\n");
-                        break;
-                    case 1:
+                    case IN_OPERATION:
                         printf("Ship in operation.\n");
                         break;
-                    case 2:
+                    case IS_DECOMMISSIONED:
                         printf("Ship is decommissioned\n");
                         break;
-                    case 3:
+                    case ON_MODERNISATION:
                         printf("Ship on modernisation\n");
                         break;
-                    case 4:
+                    case UNDER_REPAIR:
                         printf("Ship is under repair\n");
+                        break;
+                    case NO_INFORMATION:
                         break;
                 }
             printf("\n\n\n");
@@ -217,7 +227,7 @@ void print_ships_after_filter(ship **ships, size_t size, const bool *flags) {
     }
 }
 
-void delete(ship **ships, bool *flags, ship *pattern, size_t size) {
+void delete_all(ship **ships, bool *flags, ship *pattern, size_t size) {
     if (flags)
         free(flags);
     if (pattern)
@@ -229,6 +239,4 @@ void delete(ship **ships, bool *flags, ship *pattern, size_t size) {
                 free(ships[i]);
         free(ships);
     }
-
-
 }

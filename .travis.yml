@@ -1,5 +1,5 @@
 dist: bionic
-language: cpp
+language: c
 os:
   - linux
 
@@ -15,5 +15,5 @@ install:
 
 
 script:
-  - cmake CMakeLists.txt
-  - make
+  - sudo cmake CMakeLists.txt
+  - sudo make

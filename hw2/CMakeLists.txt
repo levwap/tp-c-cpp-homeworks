@@ -3,4 +3,4 @@ project(hw2 C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(hw2 main.c)
+add_executable(hw2 main.c lib/static/static.c lib/static/static.h input.c input.h)

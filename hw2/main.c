@@ -3,16 +3,21 @@
  Необходимо реализовать последовательную и параллельную программу поиска с использованием нескольких процессов
  топ-5 файлов по текстовому запросу. Принцип ранжирования – наибольшее количество упоминаний слов запроса в тексте.*/
 
-#include "input.h"
-#include "lib/static/static.h"
+#include "io.h"
+#include "lib/static/serial_ranking.h"
 
 
 int main() {
     char search_request[MAX_REQUEST_SIZE];
+    struct top_five *top = NULL;
     if (input_request(search_request))
     {
-        ranking("../data", search_request);
+        top = ranking("../small_data", search_request);
+        if (top)
+            print_top(top);
     }
 
+    if (top)
+        free(top);
     return 0;
 }
